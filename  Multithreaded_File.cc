@@ -24,7 +24,20 @@ struct SearchConfig {
 };
 
 
-void* Initmutex(SearchConfig* a);
+std::filesystem::path search(SearchConfig* fd)
+{
+    
+}
 
+int main()
+{
+    SearchConfig fd;
+    fd.root_path = "/home/linnaid/Task";
+    fd.file_type = ".md";
+    fd.max_concurrency = 4;
+    fd.max_depth = 3;
+    fd.skip_hidden = true;
 
-std::filesystem::path search(std::string type);
+    std::filesystem::path p = search(&fd);
+    return 0;
+}
