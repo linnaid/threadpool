@@ -11,6 +11,11 @@
 #include <iostream>
 #include <vector>
 #include <filesystem>
+#include <thread>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+
 
 using namespace std;
 
@@ -23,10 +28,32 @@ struct SearchConfig {
     std::vector<std::string> skip_paths;   // 要跳过的目录或文件的路径
 };
 
+std::queue<std::filesystem::path> road;
+std::mutex _lock;
+std::condition_variable sig;
 
-std::filesystem::path search(SearchConfig* fd)
+void Search()
 {
     
+    while(true)
+    {
+        std::unique_lock<std::mutex> lock(_lock);
+        std::filesystem::path a;
+
+    }
+}
+
+std::filesystem::path search(SearchConfig* fd, int depth)
+{
+    
+    road.push(fd->root_path);
+    for(int i = 0; i < fd->max_depth; i++)
+    {
+        std::thread task(Search, fd);
+
+        task.join();
+    }
+
 }
 
 int main()
@@ -38,6 +65,6 @@ int main()
     fd.max_depth = 3;
     fd.skip_hidden = true;
 
-    std::filesystem::path p = search(&fd);
+    std::filesystem::path p = search(&fd, 1);
     return 0;
 }
